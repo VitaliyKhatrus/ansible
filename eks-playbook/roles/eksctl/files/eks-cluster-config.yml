@@ -1,9 +1,9 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: "stage-cluster"
+  name: "prd-cluster"
   region: "us-west-2"
-  version: "1.17"
+  version: "1.16"
 #put all nodes from conf file
 nodeGroups:
   # Node group sys-eks
@@ -73,18 +73,18 @@ nodeGroups:
       'Name': 'eks-backend'
       'Project': 'esputnik' 
 vpc:
-  id: "vpc-06199e52f7a1ec35b"
+  id: "vpc-0daa2ff4138543ef1"
   subnets:
     public:
       us-west-2a:
-        id: "subnet-058c68945df704f86"
+        id: "subnet-0b973265f85b9faef"
       us-west-2b:
-        id: "subnet-0493ad816cc5d376a"
+        id: "subnet-0974249338a10b367"
     private:
       us-west-2a:
-        id: "subnet-0b191beda8ae76449"
+        id: "subnet-048589a7feea031b7"
       us-west-2b:
-        id: "subnet-05f826753c4677ac5"
+        id: "subnet-0fc75c9fbef6706b4"
   nat:
     gateway: Enable
 

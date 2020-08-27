@@ -8,7 +8,7 @@ ansible_connection: local
 # ENV-specific vars #
 #####################
 
-env: "stage"
+env: "prd"
 
 #################
 # ROLES globals #
