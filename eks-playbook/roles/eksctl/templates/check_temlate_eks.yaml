@@ -1,0 +1,9 @@
+- hosts:
+  - localhost
+  # become:
+  #   true
+
+  tasks:  
+    - name: "Check template content"
+      debug:
+        msg: "{{ lookup('template', './eks-cluster-config.yml.j2') }}"

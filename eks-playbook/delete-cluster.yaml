@@ -1,0 +1,51 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+  
+  tasks:
+    - name: Get Nodes name
+      ec2_instance_info:
+        region: "{{ region }}"
+        filters:
+          "tag:Name": stage-cluster-*-Node
+      register: wnodes
+
+    - name: Create empty Node name list
+      set_fact:
+        node_names: []
+
+    - name: Append Node names to list
+      set_fact:
+        node_names: "{{ node_names + [item.tags['alpha.eksctl.io/nodegroup-name']] }}"
+      with_items: "{{ wnodes.instances }}"
+
+    # - name: replace first coma
+    #   set_fact:
+    #     node_names: "{{ node_names | replace(',', '', 1) }}"
+    
+    - debug:
+        msg: "{{ item }}"
+      with_items: "{{ node_names }}"
+
+    - name: Delete NodeGroup CloudFormation stacks.
+      cloudformation:
+        stack_name: "eksctl-{{ eks_cluster_name }}-nodegroup-{{ item }}"
+        state: absent
+        region: "{{ region }}"
+      with_items: "{{ node_names }}"
+
+
+    - name: Delete CloudFormation infra and k8s stacks.
+      cloudformation:
+        stack_name: "{{ item }}"
+        state: absent
+        region: "{{ region }}"
+        # profile: "{{ aws_profile }}"
+      with_items:
+        - eksctl-{{ eks_cluster_name }}-cluster
+        - eksctl-{{ eks_cluster_name }}-stack
+        
+        

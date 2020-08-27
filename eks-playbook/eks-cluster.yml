@@ -1,0 +1,11 @@
+- hosts:
+  - all
+  # become:
+  #   true
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+  roles:
+    - role: cloudformation
+      tags: infra
+    - role: eksctl
+      tags: eks

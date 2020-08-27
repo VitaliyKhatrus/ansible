@@ -1,0 +1,92 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: "stage-cluster"
+  region: "us-west-2"
+  version: "1.17"
+#put all nodes from conf file
+nodeGroups:
+  # Node group sys-eks
+  - name: sys-eks
+    # ami: ami-01a9c9d805568fa3b
+    labels: {pool: sys-eks}
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 5
+    volumeSize: 25
+    volumeType: gp2
+    instancesDistribution:
+        instanceTypes: ['t3.medium', 't3.small'] # At least two instance types should be specified
+        onDemandBaseCapacity: 1
+        onDemandPercentageAboveBaseCapacity: 10
+        spotInstancePools: 5
+    iam:
+      attachPolicyARNs:
+       - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+       - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+       - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
+      withAddonPolicies:
+        autoScaler: true
+    privateNetworking: true
+    # securityGroups:
+    #  withShared: true
+    #  withLocal: true
+    #  attachIDs: ['sg-0b5c09249a8e7f578']
+    ssh: # use existing EC2 key
+      publicKeyName: us-west-2-devops-poli
+    tags:
+      'App': 'eks'
+      'Env': 'prod'
+      'Name': 'eks-sys-eks'
+      'Project': 'esputnik'
+# Node group backend
+  - name: backend
+    # ami: ami-01a9c9d805568fa3b
+    labels: {pool: backend}
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 3
+    volumeSize: 25
+    volumeType: gp2
+    instancesDistribution:
+        instanceTypes: ['t3.medium', 't3.small'] # At least two instance types should be specified
+        onDemandBaseCapacity: 1
+        onDemandPercentageAboveBaseCapacity: 25
+        spotInstancePools: 5
+    iam:
+      attachPolicyARNs:
+       - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+       - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+       - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
+      withAddonPolicies:
+        autoScaler: true
+    privateNetworking: true
+    # securityGroups:
+    #  withShared: true
+    #  withLocal: true
+    #  attachIDs: ['sg-0b5c09249a8e7f578']
+    ssh: # use existing EC2 key
+      publicKeyName: us-west-2-devops-poli
+    tags:
+      'App': 'eks'
+      'Env': 'prod'
+      'Name': 'eks-backend'
+      'Project': 'esputnik' 
+vpc:
+  id: "vpc-06199e52f7a1ec35b"
+  subnets:
+    public:
+      us-west-2a:
+        id: "subnet-058c68945df704f86"
+      us-west-2b:
+        id: "subnet-0493ad816cc5d376a"
+    private:
+      us-west-2a:
+        id: "subnet-0b191beda8ae76449"
+      us-west-2b:
+        id: "subnet-05f826753c4677ac5"
+  nat:
+    gateway: Enable
+
+
+
