@@ -10,7 +10,7 @@
       ec2_instance_info:
         region: "{{ region }}"
         filters:
-          "tag:Name": stage-cluster-*-Node
+          "tag:Name": "{{ eks_cluster_name }}-*-Node"
       register: wnodes
 
     - name: Create empty Node name list
