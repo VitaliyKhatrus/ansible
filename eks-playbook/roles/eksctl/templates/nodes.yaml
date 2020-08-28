@@ -28,9 +28,9 @@
       publicKeyName: us-west-2-devops-poli
     tags:
       'App': 'eks'
-      'Env': 'prod'
+      'Env': '{{ env }}'
       'Name': 'eks-sys-eks'
-      'Project': 'esputnik'
+      'Project': 'space trip'
 # Node group backend
   - name: backend
     # ami: ami-01a9c9d805568fa3b
@@ -61,6 +61,6 @@
       publicKeyName: us-west-2-devops-poli
     tags:
       'App': 'eks'
-      'Env': 'prod'
+      'Env': '{{ env }}'
       'Name': 'eks-backend'
-      'Project': 'esputnik'
+      'Project': 'space trip'
